@@ -25,7 +25,7 @@
 
   <!-- optional arguments -->
   <arg name="enable_robot_odometry_init_guess" default="false" />
-  <arg name="robot_odom_frame_id" default="robot_odom" />
+  <arg name="robot_odom_frame_id" default="odom" />
 
   <!-- transformation between lidar and base_footprint -->
   <node pkg="tf" type="static_transform_publisher" name="lidar2base_publisher" args="0 0 0.46175 0 0 0 $(arg base_link_frame_id) os_lidar 10" />
