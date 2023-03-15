@@ -1,0 +1,452 @@
+<?xml version="1.0"?>
+<!--
+  Hexagon stacks
+ -->
+<robot name="stack_hexagons" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find turtlebot_description)/urdf/common_properties.urdf.xacro"/>
+  
+  <!-- Xacro properties -->
+  <xacro:property name="M_SCALE" value="0.001"/>
+  
+  <!-- Xacro macros -->
+  <!-- Pole macros -->
+  <xacro:macro name="stack_bottom_pole" params="parent number x_loc y_loc z_loc roll=0.0 pitch=0.0 yaw=0.0">
+    <joint name="pole_bottom_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${roll} ${pitch} ${yaw}"/>
+      <parent link="${parent}"/>
+      <child link="pole_bottom_${number}_link"/>
+    </joint>
+    <link name="pole_bottom_${number}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/pole_bottom.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.0492" radius="0.006"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.008"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.000001686" ixy="0.0" ixz="0.0"
+                 iyy="0.000001686" iyz="0.0"
+                 izz="0.000000144"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+  
+  <xacro:macro name="stack_middle_pole" params="parent number x_loc y_loc z_loc roll=0.0 pitch=0.0 yaw=0.0">
+    <joint name="pole_middle_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${roll} ${pitch} ${yaw}" />
+      <parent link="${parent}"/>
+      <child link="pole_middle_${number}_link"/>
+    </joint>
+    <link name="pole_middle_${number}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${M_PI} 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/pole_middle.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.0608" radius="0.006"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.012"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.000003805" ixy="0.0" ixz="0.0"
+                 iyy="0.000003805" iyz="0.0"
+                 izz="0.000000216"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="stack_top_pole" params="parent number x_loc y_loc z_loc roll=0.0 pitch=0.0 yaw=0.0">
+    <joint name="pole_top_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${roll} ${pitch} ${yaw}"/>
+      <parent link="${parent}"/>
+      <child link="pole_top_${number}_link"/>
+    </joint>
+    <link name="pole_top_${number}_link">
+      <visual>
+        <origin xyz=" 0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/pole_top.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.2032" radius="0.006"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.060"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.000206991" ixy="0.0" ixz="0.0"
+                 iyy="0.000206991" iyz="0.0"
+                 izz="0.000001080"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <!-- <xacro:macro name="stack_3d_sensor_pole" params="parent number x_loc y_loc z_loc roll=0.0 pitch=0.0 yaw=0.0">
+    <joint name="pole_kinect_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${roll} ${pitch} ${yaw}"/>
+      <parent link="${parent}"/>
+      <child link="pole_kinect_${number}_link"/>
+    </joint>
+    <link name="pole_kinect_${number}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/pole_kinect.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.0936" radius="0.006"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.020"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.000014782" ixy="0.0" ixz="0.0"
+                 iyy="0.000014782" iyz="0.0"
+                 izz="0.000000360"/>
+      </inertial>
+    </link>
+  </xacro:macro> -->
+
+  <xacro:include filename="$(find zed_wrapper)/urdf/include/materials.urdf.xacro" />
+  <xacro:property name="M_PI"     value="3.1415926535897931" />
+
+  <!--
+    Parameters:
+      - name: the camera's name.  should match the parameter sent to the launch file for this camera
+      - model: the tye of camera, one of zed, zedm, zed2, zed2i
+      - parent: the parent link of the camera.  must be defined in the URDF file that uses this macro
+      - origin: the xyz/rpy offset from the parent link
+  -->
+  <xacro:macro name="zed_camera" params="name=zed model=zed parent *origin">
+    <xacro:if value="${model == 'zed'}">
+      <xacro:property name="baseline" value="0.12" />
+      <xacro:property name="height" value="0.03" />
+      <xacro:property name="bottom_slope" value="0.05" />
+      <xacro:property name="screw_offset_x" value="0.0" />
+      <xacro:property name="optical_offset_x" value="-0.01" />
+    </xacro:if>
+    <xacro:if value="${model == 'zedm'}">
+      <xacro:property name="baseline" value="0.06" />
+      <xacro:property name="height" value="0.0265" />
+      <xacro:property name="bottom_slope" value="0.0" /> 
+      <xacro:property name="screw_offset_x" value="0.0" />
+      <xacro:property name="optical_offset_x" value="0.0" />
+    </xacro:if>
+    <xacro:if value="${model == 'zed2'}">
+      <xacro:property name="baseline" value="0.12" />
+      <xacro:property name="height" value="0.03" />
+      <xacro:property name="bottom_slope" value="0.05" />
+      <xacro:property name="screw_offset_x" value="0.0" />
+      <xacro:property name="optical_offset_x" value="-0.01" />
+    </xacro:if>
+    <xacro:if value="${model == 'zed2i'}">
+      <xacro:property name="baseline" value="0.12" />
+      <xacro:property name="height" value="0.03" />
+      <xacro:property name="bottom_slope" value="0.0" />
+      <xacro:property name="screw_offset_x" value="-0.01" />
+      <xacro:property name="optical_offset_x" value="-0.01" />
+    </xacro:if>
+
+
+
+    <!-- Camera mounting point (the threaded screw hole in the bottom) -->
+    <link name="${name}_base_link" />
+    <joint name="${name}_base_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${name}_base_link"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+
+
+    <!-- Camera Center -->
+    <link name="${name}_camera_center">
+      <visual>
+        <origin xyz="${screw_offset_x} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://zed_interfaces/meshes/${model}.stl" />
+        </geometry>
+        <material name="${model}_mat" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://zed_interfaces/meshes/${model}.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${name}_camera_center_joint" type="fixed">
+      <parent link="${name}_base_link"/>
+      <child link="${name}_camera_center"/>
+      <origin xyz="0 0 ${height/2}" rpy="0 ${bottom_slope} 0" />
+    </joint>
+
+
+    <!-- Left Camera -->
+    <link name="${name}_left_camera_frame" />
+    <joint name="${name}_left_camera_joint" type="fixed">
+      <parent link="${name}_camera_center"/>
+      <child link="${name}_left_camera_frame"/>
+      <origin xyz="0 ${baseline/2} 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${name}_left_camera_optical_frame"/>
+    <joint name="${name}_left_camera_optical_joint" type="fixed">
+      <origin xyz="${optical_offset_x} 0 0" rpy="-${M_PI/2} 0.0 -${M_PI/2}"/>
+      <parent link="${name}_left_camera_frame"/>
+      <child link="${name}_left_camera_optical_frame"/>
+    </joint>
+
+
+    <!-- Right Camera -->
+    <link name="${name}_right_camera_frame" />
+    <joint name="${name}_right_camera_joint" type="fixed">
+      <parent link="${name}_camera_center"/>
+      <child link="${name}_right_camera_frame"/>
+      <origin xyz="0 -${baseline/2} 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${name}_right_camera_optical_frame"/>
+    <joint name="${name}_right_camera_optical_joint" type="fixed">
+      <origin xyz="${optical_offset_x} 0 0" rpy="-${M_PI/2} 0.0 -${M_PI/2}"/>
+      <parent link="${name}_right_camera_frame"/>
+      <child link="${name}_right_camera_optical_frame"/>
+    </joint>
+
+  </xacro:macro>
+
+  <xacro:macro name="os_sensor" params="*origin parent:=base_link name:=os_sensor topic_points:=/ouster/points topic_imu:=/ouster/imu hz:=10 lasers:=64 samples:=512 min_range:=0.9 max_range:=75.0 noise:=0.008 min_angle:=-${M_PI} max_angle:=${M_PI} lidar_link:=os_lidar imu_link:=os_imu vfov_min:=-.26 vfov_max:=.26">
+
+    <joint name="${name}_mount_joint" type="fixed">
+      <xacro:insert_block name="origin" /> 
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+    </joint>
+
+    <link name="${name}">
+      <inertial>
+         <mass value="0.33"/>
+         <origin xyz="0 0 0.0365" rpy="0 0 0" />
+         <inertia ixx="0.000241148" ixy="0" ixz="0"
+          iyy="0.000241148" iyz="0" izz="0.000264"/>
+      </inertial>
+      <collision name="base_collision">
+         <origin xyz="0 0 0.0365" rpy="0 0 0" />
+         <geometry>
+ 	        <cylinder radius="0.04" length="0.073"/>
+         </geometry>
+      </collision>
+      <visual name="base_visual">
+         <origin xyz="0 0 0.0" rpy="0 0 1.5707" />
+         <geometry>
+	         <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/os1_64.dae" /> 
+           <!-- <cylinder length="0.073" radius="0.04" /> -->
+         </geometry>
+      </visual>
+    </link>
+
+    <link name="${imu_link}" />
+
+    <link name="${lidar_link}" />
+
+
+    <joint name="${name}_imu_link_joint" type="fixed">
+      <parent link="${name}" />
+      <child link="${imu_link}" />
+      <origin xyz="0.006253 -0.011775 0.007645" rpy="0 0 0" />
+    </joint>
+    <gazebo reference="${imu_link}">
+    </gazebo>
+
+    <joint name="${name}_lidar_link_joint" type="fixed">
+      <parent link="${name}" />
+      <child link="${lidar_link}" />
+      <origin xyz="0.0 0.0 0.03618" rpy="0 0 0" />
+    </joint>
+
+    <!-- Gazebo requires the ouster_gazebo_plugins package -->
+    <gazebo reference="${name}">
+        <sensor type="ray" name="${name}-OS1-64">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>false</visualize>
+          <update_rate>${hz}</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${samples}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle}</min_angle>
+                <max_angle>${max_angle}</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>${lasers}</samples>
+                <resolution>1</resolution>
+                <min_angle>${vfov_min}</min_angle>
+                <max_angle>${vfov_max}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${min_range}</min>
+              <max>${max_range}</max>
+              <resolution>0.03</resolution>
+            </range>
+          </ray>
+          <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_laser.so">
+            <topicName>${topic_points}</topicName>
+            <frameName>${lidar_link}</frameName>
+            <min_range>${min_range}</min_range>
+            <max_range>${max_range}</max_range>
+            <gaussianNoise>${noise}</gaussianNoise>
+          </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- IMU -->
+  <gazebo>
+    <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+      <robotNamespace>/</robotNamespace>
+      <updateRate>100.0</updateRate> 
+      <bodyName>${imu_link}</bodyName>
+      <topicName>${topic_imu}</topicName>
+      <accelDrift>0.005 0.005 0.005</accelDrift>
+      <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
+      <rateDrift>0.005 0.005 0.005 </rateDrift>
+      <rateGaussianNoise>0.005 0.005 0.005 </rateGaussianNoise>
+      <headingDrift>0.005</headingDrift>
+      <headingGaussianNoise>0.005</headingGaussianNoise>
+    </plugin>
+  </gazebo>
+
+  </xacro:macro>
+  
+  <!-- 
+    Stack macro - all the components relative transforms are made with respect 
+    to the parent link (usually base_link). They could be made relative to each
+    other, but there is no necessary reason to do so.
+  -->
+  <xacro:macro name="stack_hexagons" params="parent">
+    <xacro:stack_bottom_pole parent="${parent}" number="0" x_loc= "0.120" y_loc= "0.082" z_loc="0.1028"/>
+    <xacro:stack_bottom_pole parent="${parent}" number="1" x_loc= "0.055" y_loc= "0.120" z_loc="0.1028"/>
+    <xacro:stack_bottom_pole parent="${parent}" number="2" x_loc="-0.055" y_loc= "0.120" z_loc="0.1028"/>
+    <xacro:stack_bottom_pole parent="${parent}" number="3" x_loc= "0.120" y_loc="-0.082" z_loc="0.1028"/>
+    <xacro:stack_bottom_pole parent="${parent}" number="4" x_loc= "0.055" y_loc="-0.120" z_loc="0.1028"/>
+    <xacro:stack_bottom_pole parent="${parent}" number="5" x_loc="-0.055" y_loc="-0.120" z_loc="0.1028"/>
+    
+    <joint name="plate_bottom_joint" type="fixed">
+      <origin xyz="0.02364 0.0 0.1306" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="plate_bottom_link"/>
+    </joint>  
+    <link name="plate_bottom_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/plate_bottom.dae"/>
+        </geometry>
+      </visual>  
+      <collision>
+        <origin xyz="-0.02364 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.006" radius="0.170"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.520" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003328" ixy="0.0" ixz="0.0"
+                 iyy="0.003328" iyz="0.0"
+                 izz="0.006656" />
+      </inertial>
+    </link>
+    
+    <xacro:stack_middle_pole parent="${parent}" number="0" x_loc= "0.0381" y_loc= "0.1505" z_loc="0.1640"/>
+    <xacro:stack_middle_pole parent="${parent}" number="1" x_loc= "0.0381" y_loc="-0.1505" z_loc="0.1640"/>
+    <xacro:stack_middle_pole parent="${parent}" number="2" x_loc="-0.0381" y_loc= "0.1505" z_loc="0.1640"/>
+    <xacro:stack_middle_pole parent="${parent}" number="3" x_loc="-0.0381" y_loc="-0.1505" z_loc="0.1640"/>
+    
+    <joint name="plate_middle_joint" type="fixed">
+      <origin xyz="-0.01364 0.0 0.1874" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="plate_middle_link"/>
+    </joint>  
+    <link name="plate_middle_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/plate_middle.dae"/>
+        </geometry>
+      </visual>  
+      <collision>
+        <origin xyz="0.01364 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/plate_simple.stl"
+                scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.520" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003328" ixy="0.0" ixz="0.0"
+                 iyy="0.003328" iyz="0.0"
+                 izz="0.006656" />
+      </inertial>  
+    </link>
+    
+    <xacro:stack_top_pole parent="${parent}" number="0" x_loc= "0.0381" y_loc= "0.1505" z_loc="0.2920"/>
+    <xacro:stack_top_pole parent="${parent}" number="1" x_loc= "0.0381" y_loc="-0.1505" z_loc="0.2920"/>
+    <xacro:stack_top_pole parent="${parent}" number="2" x_loc="-0.0381" y_loc= "0.1505" z_loc="0.2920"/>
+    <xacro:stack_top_pole parent="${parent}" number="3" x_loc="-0.0381" y_loc="-0.1505" z_loc="0.2920"/>
+    <!-- <xacro:stack_3d_sensor_pole parent="${parent}" number="0" x_loc="-0.1024" y_loc= "0.098" z_loc="0.2372"/>
+    <xacro:stack_3d_sensor_pole parent="${parent}" number="1" x_loc="-0.1024" y_loc="-0.098" z_loc="0.2372"/> -->
+    
+    <joint name="plate_top_joint" type="fixed">
+      <origin xyz="-0.01364 0.0  0.3966" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="plate_top_link"/>
+    </joint>  
+    <link name="plate_top_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/plate_top.dae"/>
+        </geometry>
+      </visual>  
+      <collision>
+        <origin xyz="0.01364 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot_description/meshes/stacks/hexagons/plate_simple.stl"
+                scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.520"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.003328" ixy="0.0" ixz="0.0"
+                 iyy="0.003328" iyz="0.0"
+                 izz="0.006656" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+
+
+
+
+</robot>

@@ -1,0 +1,12 @@
+<!--
+  Robot description only (used in private and paired master).
+ -->
+<launch>
+  <arg name="base"/>
+  <arg name="stacks"/>
+  <arg name="camera"/>
+
+  <arg name="urdf_file" default="$(find xacro)/xacro '$(find kobuki_zed_orb_slam3)/robot/$(arg base)_$(arg stacks)_$(arg camera).urdf.xacro'"/>
+  <param name="robot_description" command="$(arg urdf_file)"/>
+
+</launch>
