@@ -35,16 +35,16 @@
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="5.0" />
   </node>
-  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 base_footprint odom 10" />
-  <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map base_footprint 10" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 base_footprint odom 10" /> -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map base_footprint 10" /> -->
 
-  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_brocaster" args="0 0 0 0 0 0 base_footprint base_link 10" />  -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_brocaster" args="0 0 -0.025 0 0 0 base_link base_footprint 10" />  -->
 
-  <include file="$(find kobuki_zed_orb_slam3)/launch/lidar_sensor.launch">
+  <!-- <include file="$(find kobuki_zed_orb_slam3)/launch/lidar_sensor.launch">
     <arg name="sensor_hostname" value="$(arg lidar_hostname)" doc="hostname or IP in dotted decimal form of the sensor"/>
-  </include>
+  </include> -->
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" /> -->
 
 
   <node name="$(arg node_name)" pkg="zed_wrapper" type="zed_wrapper_node" output="screen" required="true">
@@ -56,7 +56,7 @@
     <param name="stream"                            value="$(arg stream)" />
     <param name="general/zed_id"                    value="$(arg camera_id)" />
     <param name="general/gpu_id"                    value="$(arg gpu_id)" />
-    <param name="pos_tracking/pos_tracking_enabled" value="true"/>
+    <param name="pos_tracking/pos_tracking_enabled" value="false"/>
     <param name="pos_tracking/publish_tf" value="false"/>
     <param name="pos_tracking/publish_map_tf" value="false"/>
     

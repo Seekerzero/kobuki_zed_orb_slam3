@@ -126,7 +126,7 @@
     </link>
   </xacro:macro> -->
 
-  <xacro:include filename="$(find zed_wrapper)/urdf/include/materials.urdf.xacro" />
+  <xacro:include filename="$(find kobuki_zed_orb_slam3)/robot/meshes/materials.urdf.xacro" />
   <xacro:property name="M_PI"     value="3.1415926535897931" />
 
   <!--
@@ -182,13 +182,13 @@
       <visual>
         <origin xyz="${screw_offset_x} 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://zed_interfaces/meshes/${model}.stl" />
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/${model}.stl" />
         </geometry>
         <material name="${model}_mat" />
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://zed_interfaces/meshes/${model}.stl" />
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/${model}.stl" />
         </geometry>
       </collision>
     </link>
