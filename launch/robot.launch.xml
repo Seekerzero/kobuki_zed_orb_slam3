@@ -48,7 +48,7 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
 
 
-  <!-- <node name="$(arg node_name)" pkg="zed_wrapper" type="zed_wrapper_node" output="screen" required="true">
+  <node name="$(arg node_name)" pkg="zed_wrapper" type="zed_wrapper_node" output="screen" required="true">
     <rosparam file="$(find kobuki_zed_orb_slam3)/configuration_files/common.yaml" command="load" />
     <rosparam file="$(find zed_wrapper)/params/$(arg camera_model).yaml" command="load" />
     <param name="general/camera_name"               value="zed" />
@@ -61,7 +61,7 @@
     <param name="pos_tracking/publish_tf" value="false"/>
     <param name="pos_tracking/publish_map_tf" value="false"/>
     
-  </node> -->
+  </node>
 
 </launch>
 
