@@ -32,7 +32,7 @@
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
 
-  <include file="$(find kobuki_zed_orb_slam3)/launch/hdl_graph_slam_imu.launch"/>
+  <include file="$(find kobuki_zed_orb_slam3)/launch/hdl_graph_slam.launch"/>
 
   <group ns="$(arg ouster_ns)">
     <node pkg="nodelet" type="nodelet" name="os_nodelet_mgr"
