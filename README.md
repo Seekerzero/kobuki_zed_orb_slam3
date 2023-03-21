@@ -162,7 +162,7 @@ $ roslaunch kobuki_zed_orb_slam3 lidar_sensor.launch
 rosbag the topics:
 
 ```bash
-$ rosbag record /ouster/points /ouster/imu /ouster/range_Image
+$ rosbag record /ouster/points /ouster/imu /ouster/range_image
 ```
 
 control the kobuki with:
