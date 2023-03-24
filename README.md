@@ -95,21 +95,28 @@ and change the **sensor_hostname** in **lidar_sensor.launch** to the lidar hostn
 
 
 
-Setup the [HDL graph SLAM](https://github.com/koide3/hdl_graph_slam) and [ethz_msf imu plugin](https://github.com/ethz-asl/ethzasl_msf.git):
+Setup the [FAST-LIO_SLAM](https://github.com/gisbi-kim/FAST_LIO_SLAM) Integration:
+
+Setup the dependencies:
+
+​	Install [ceres solver](http://ceres-solver.org/installation.html)
+
+​	Install [GTSAM](https://gtsam.org/get_started/)
+
+Install the ROS packages:
 
 ```bash
 $ cd ~/catkin_ws/src
-$ sudo apt-get install ros-noetic-geodesy ros-noetic-pcl-ros ros-noetic-nmea-msgs ros-noetic-libg2o libgoogle-glog-dev
-$ git clone https://github.com/koide3/ndt_omp.git
-$ git clone https://github.com/SMRT-AIST/fast_gicp.git --recursive
-$ git clone https://github.com/koide3/hdl_graph_slam
-$ git clone https://github.com/ethz-asl/ethzasl_msf.git
-$ git clone https://github.com/ethz-asl/glog_catkin.git
-$ git clone https://github.com/catkin/catkin_simple.git
+$ git clone https://github.com/Livox-SDK/livox_ros_driver.git
+$ git clone https://github.com/gisbi-kim/FAST_LIO_SLAM.git
 $ rosdep install --from-paths src --ignore-src -r -y
 $ catkin_make --cmake-args -DCMAKE_BUILD_TYPE=Release
 $ source ~/.bashrc
 ```
+
+
+
+Modify the ROS topic based on your lidar topics in fast_lio launch files.
 
 
 
@@ -126,6 +133,8 @@ On the laptop:
 ```bash
 $roscore
 ```
+
+Connect the jetson to Internet to sync the time, otherwise two bags from jetson and laptop will not be able merge into same timestamps. And then connect the jetson to ROS network which also connect the laptop.
 
 SSH to jetson board:
 
@@ -187,21 +196,19 @@ get into the folder where contains two bag files:
 $ rosbag-merge --outbag_name out.bag
 ```
 
+launch the fast_lio_slam node:
+
+```bash
+$ roslaunch roslaunch fast_lio mapping_ouster64_mulran.launch
+```
+
 play the merge bag:
 
 ```bash
 $ rosbag play --clock out.bag
 ```
 
-pause with **space**
 
-launch the hdl slam node:
-
-```bash
-$ roslaunch kobuki_zed_orb_slam3 hdl_graph_slam_imu.launch
-```
-
-change the fixed frame to map and play the rosbag to view the hdl graph slam ground truth.
 
 
 
