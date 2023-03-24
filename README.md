@@ -208,7 +208,11 @@ play the merge bag:
 $ rosbag play --clock out.bag
 ```
 
+To view the robot model in the record data;
 
+```bash
+$ roslaunch kobuki_zed_orb_slam3 view_model.launch
+```
 
 
 
