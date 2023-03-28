@@ -11,7 +11,7 @@
     RNG19_RFL8_SIG16_NIR16,
     RNG15_RFL8_NIR8
     }"/>
-  <arg name="lidar_mode" default="512x10" doc="resolution and rate; possible values: {
+  <arg name="lidar_mode" default="1024x20" doc="resolution and rate; possible values: {
     512x10,
     512x20,
     1024x10,
@@ -32,7 +32,7 @@
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
 
-  <include file="$(find kobuki_zed_orb_slam3)/launch/hdl_graph_slam_imu.launch"/>
+  <include file="$(find kobuki_zed_orb_slam3)/launch/hdl_graph_slam.launch"/>
 
   <group ns="$(arg ouster_ns)">
     <node pkg="nodelet" type="nodelet" name="os_nodelet_mgr"

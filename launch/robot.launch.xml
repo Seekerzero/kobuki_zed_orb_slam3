@@ -10,7 +10,7 @@
   <arg name="gpu_id"                default="-1" />
   <arg name="camera_model"          default="zed" /> <!-- 'zed' or 'zedm' or 'zed2' -->
   <!-- Load SVO file -->
-  <arg name="svo_file"              default="" /><!-- <arg name="svo_file" default="path/to/svo/file.svo"> -->
+  <arg name="svo_file"              default="" /><!-- <arg name="svo_sfile" default="path/to/svo/file.svo"> -->
   <!-- Remote stream -->
   <arg name="stream"                default="" /> <!-- <arg name="stream" default="<ip_address>:<port>"> -->
   <arg name="node_name"             default="zed_node" />
