@@ -10,7 +10,7 @@
   <arg name="gpu_id"                default="-1" />
   <arg name="camera_model"          default="zed" /> <!-- 'zed' or 'zedm' or 'zed2' -->
   <!-- Load SVO file -->
-  <arg name="svo_file"              default="" /><!-- <arg name="svo_file" default="path/to/svo/file.svo"> -->
+  <arg name="svo_file"              default="" /><!-- <arg name="svo_sfile" default="path/to/svo/file.svo"> -->
   <!-- Remote stream -->
   <arg name="stream"                default="" /> <!-- <arg name="stream" default="<ip_address>:<port>"> -->
   <arg name="node_name"             default="zed_node" />
@@ -33,12 +33,12 @@
 
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="10.0" />
+    <param name="publish_frequency" type="double" value="5.0" />
   </node>
   <!-- <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 base_footprint odom 10" /> -->
-  <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map base_footprint 10" /> -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map base_footprint 5" /> -->
 
-  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_brocaster" args="0 0 -0.025 0 0 0 base_link base_footprint 10" />  -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_brocaster" args="0 0 -0.025 0 0 0 base_link base_footprint 10" /> 
 
   <!-- <include file="$(find kobuki_zed_orb_slam3)/launch/lidar_sensor.launch">
     <arg name="sensor_hostname" value="$(arg lidar_hostname)" doc="hostname or IP in dotted decimal form of the sensor"/>
