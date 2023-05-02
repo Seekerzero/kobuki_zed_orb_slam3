@@ -232,6 +232,252 @@
 
   </xacro:macro>
 
+  <xacro:macro name="sensor_d435" params="parent *origin">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+  
+    <!-- The following values are approximate, and the camera node
+     publishing TF values with actual calibrated camera extrinsic values -->
+    <xacro:property name="d435_cam_depth_to_left_ir_offset" value="0.0"/>
+    <xacro:property name="d435_cam_depth_to_right_ir_offset" value="-0.050"/>
+    <xacro:property name="d435_cam_depth_to_color_offset" value="0.015"/>
+  
+    <!-- The following values model the aluminum peripherial case for the
+  	D435 camera, with the camera joint represented by the actual 
+  	peripherial camera tripod mount -->
+    <xacro:property name="d435_cam_width" value="0.090"/>
+    <xacro:property name="d435_cam_height" value="0.025"/>
+    <xacro:property name="d435_cam_depth" value="0.02505"/>
+    <xacro:property name="d435_cam_mount_from_center_offset" value="0.0149"/>
+  
+    <!-- The following offset is relative the the physical D435 camera peripherial
+  	camera tripod mount -->
+    <xacro:property name="d435_cam_depth_px" value="${d435_cam_mount_from_center_offset}"/>
+    <xacro:property name="d435_cam_depth_py" value="0.0175"/>
+    <xacro:property name="d435_cam_depth_pz" value="${d435_cam_height/2}"/>
+
+    <material name="aluminum1">
+	  <color rgba="0.5 0.5 0.5 1"/>
+    </material>
+
+
+    <!-- camera body, with origin at bottom screw mount -->
+    <joint name="camera_joint1" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="camera_bottom_screw_frame1" />
+    </joint>
+    <link name="camera_bottom_screw_frame1"/>
+
+    <joint name="camera_link1_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_py} ${d435_cam_depth_pz}" rpy="0 0 0"/>
+      <parent link="camera_bottom_screw_frame1"/>
+      <child link="camera_link1" />
+    </joint>
+
+    <link name="camera_link1">
+      <visual>
+      <origin xyz="${d435_cam_mount_from_center_offset} ${-d435_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/d435.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+        <material name="aluminum1"/>
+      </visual>
+      <collision>
+        <origin xyz="${d435_cam_mount_from_center_offset} ${-d435_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/d435.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+      </collision>
+      <inertial>
+        <!-- The following are not reliable values, and should not be used for modeling -->
+        <mass value="0.564" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+      </inertial>
+    </link>
+   
+    <!-- camera depth joints and links -->
+    <joint name="camera_depth_joint1" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="camera_link1"/>
+      <child link="camera_depth_frame1" />
+    </joint>
+    <link name="camera_depth_frame1"/>
+
+    <joint name="camera_depth_optical_joint1" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_depth_frame1" />
+      <child link="camera_depth_optical_frame1" />
+    </joint>
+    <link name="camera_depth_optical_frame1"/>
+      
+    <!-- camera left IR joints and links -->
+    <joint name="camera_left_ir_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_left_ir_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame1" />
+      <child link="camera_left_ir_frame" />
+    </joint>
+    <link name="camera_left_ir_frame"/>
+
+    <joint name="camera_left_ir_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_left_ir_frame" />
+      <child link="camera_left_ir_optical_frame" />
+    </joint>
+    <link name="camera_left_ir_optical_frame"/>
+
+    <!-- camera right IR joints and links -->
+    <joint name="camera_right_ir_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_right_ir_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame1" />
+      <child link="camera_right_ir_frame" />
+    </joint>
+    <link name="camera_right_ir_frame"/>
+
+    <joint name="camera_right_ir_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_right_ir_frame" />
+      <child link="camera_right_ir_optical_frame" />
+    </joint>
+    <link name="camera_right_ir_optical_frame"/>
+
+    <!-- camera color joints and links -->
+    <joint name="camera_color_joint" type="fixed">
+      <origin xyz="0 ${d435_cam_depth_to_color_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame1" />
+      <child link="camera_color_frame" />
+    </joint>
+    <link name="camera_color_frame"/>
+
+    <joint name="camera_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_color_frame" />
+      <child link="camera_color_optical_frame" />
+    </joint>
+    <link name="camera_color_optical_frame"/>
+
+  </xacro:macro>
+
+  <xacro:macro name="sensor_t265" params="parent *origin">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <!-- The following values are approximate, and the camera node
+     publishing TF values with actual calibrated camera extrinsic values -->
+    <xacro:property name="t265_cam_depth_to_left_offset" value="0.023"/>
+    <xacro:property name="t265_cam_depth_to_right_offset" value="-0.041"/>
+    <xacro:property name="t265_cam_depth_to_imu_offset" value="0.015"/>
+
+    <!-- The following values model the aluminum peripherial case for the
+  	t265 camera, with the camera joint represented by the actual
+  	peripherial camera tripod mount -->
+    <xacro:property name="t265_cam_width" value="0.108"/>
+    <xacro:property name="t265_cam_height" value="0.024"/>
+    <xacro:property name="t265_cam_depth" value="0.012005"/>
+    <xacro:property name="t265_cam_mount_from_center_offset" value="0.0055"/>
+
+    <!-- The following offset is relative the the physical t265 camera peripherial
+  	camera tripod mount -->
+    <xacro:property name="t265_cam_depth_px" value="${t265_cam_mount_from_center_offset}"/>
+    <xacro:property name="t265_cam_depth_py" value="0.010"/>
+    <xacro:property name="t265_cam_depth_pz" value="${t265_cam_height/2}"/>
+
+    <material name="aluminum2">
+	     <color rgba="0.2 0.2 0.2 1"/>
+    </material>
+
+
+    <!-- camera body, with origin at bottom screw mount -->
+    <joint name="camera_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="camera_bottom_screw_frame" />
+    </joint>
+
+    <link name="camera_bottom_screw_frame"/>
+
+    <joint name="camera_link_joint" type="fixed">
+      <origin xyz="0 ${t265_cam_depth_py} ${t265_cam_depth_pz}" rpy="0 0 0"/>
+      <parent link="camera_bottom_screw_frame"/>
+      <child link="camera_link" />
+    </joint>
+
+    <link name="camera_link">
+      <visual>
+      <origin xyz="${t265_cam_depth_px} ${t265_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/t265.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+        <material name="aluminum2"/>
+      </visual>
+      <collision>
+        <origin xyz="${t265_cam_depth_px} ${t265_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://kobuki_zed_orb_slam3/robot/meshes/t265.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+      </collision>
+      <inertial>
+        <!-- The following are not reliable values, and should not be used for modeling -->
+        <mass value="0.054" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+      </inertial>
+    </link>
+
+    <!-- camera depth joints and links -->
+    <joint name="camera_depth_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="camera_link"/>
+      <child link="camera_depth_frame" />
+    </joint>
+    <link name="camera_depth_frame"/>
+
+    <joint name="camera_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_depth_frame" />
+      <child link="camera_depth_optical_frame" />
+    </joint>
+    <link name="camera_depth_optical_frame"/>
+
+    <!-- camera left IR joints and links -->
+    <joint name="camera_left_joint" type="fixed">
+      <origin xyz="0 ${t265_cam_depth_to_left_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame" />
+      <child link="camera_left_frame" />
+    </joint>
+    <link name="camera_left_frame"/>
+
+    <joint name="camera_left_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_left_frame" />
+      <child link="camera_left_optical_frame" />
+    </joint>
+    <link name="camera_left_optical_frame"/>
+
+    <!-- camera right IR joints and links -->
+    <joint name="camera_right_joint" type="fixed">
+      <origin xyz="0 ${t265_cam_depth_to_left_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame" />
+      <child link="camera_right_frame" />
+    </joint>
+    <link name="camera_right_frame"/>
+
+    <joint name="camera_right_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_right_frame" />
+      <child link="camera_right_optical_frame" />
+    </joint>
+    <link name="camera_right_optical_frame"/>
+
+    <!-- IMU joints and links -->
+    <joint name="imu_joint" type="fixed">
+      <origin xyz="0 ${t265_cam_depth_to_imu_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame" />
+      <child link="imu_frame" />
+    </joint>
+    <link name="imu_frame"/>
+
+  </xacro:macro>
+
   <xacro:macro name="os_sensor" params="*origin parent:=base_link name:=os_sensor topic_points:=/ouster/points topic_imu:=/ouster/imu hz:=10 lasers:=64 samples:=512 min_range:=0.9 max_range:=75.0 noise:=0.008 min_angle:=-${M_PI} max_angle:=${M_PI} lidar_link:=os_lidar imu_link:=os_imu vfov_min:=-.26 vfov_max:=.26">
 
     <joint name="${name}_mount_joint" type="fixed">

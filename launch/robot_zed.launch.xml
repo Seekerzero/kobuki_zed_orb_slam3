@@ -1,0 +1,67 @@
+<!--
+  Collection of robot-centric definitions and nodes for the turtlebot. 
+ -->
+<launch>
+  <arg name="base"/>
+  <arg name="stacks"/>
+  <arg name="camera"/>
+  <arg name="camera_name"          default="zed" />
+  <arg name="camera_id"             default="0" />
+  <arg name="gpu_id"                default="-1" />
+  <arg name="camera_model"          default="zed" /> <!-- 'zed' or 'zedm' or 'zed2' -->
+  <!-- Load SVO file -->
+  <arg name="svo_file"              default="" /><!-- <arg name="svo_sfile" default="path/to/svo/file.svo"> -->
+  <!-- Remote stream -->
+  <arg name="stream"                default="" /> <!-- <arg name="stream" default="<ip_address>:<port>"> -->
+  <arg name="node_name"             default="zed_node" />
+  <arg name="lidar_hostname"       default="os1-991923000843.local"/>
+  
+  <include file="$(find kobuki_zed_orb_slam3)/launch/description.launch.xml">
+    <arg name="base" value="$(arg base)" />
+    <arg name="stacks" value="$(arg stacks)" />
+    <arg name="camera" value="$(arg camera)" />
+  </include>
+
+  <!-- important generally, but specifically utilised by the current app manager -->  
+  <param name="robot/name" value="$(optenv ROBOT turtlebot)"/>
+  <param name="robot/type" value="turtlebot"/>
+  
+  
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+    <rosparam command="load" file="$(find turtlebot_bringup)/param/$(arg base)/diagnostics.yaml" />
+  </node>
+
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="5.0" />
+  </node>
+  <!-- <node pkg="tf" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 base_footprint odom 10" /> -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map base_footprint 5" /> -->
+
+  <node pkg="tf" type="static_transform_publisher" name="base_link_brocaster" args="0 0 -0.025 0 0 0 base_link base_footprint 10" /> 
+
+  <!-- <include file="$(find kobuki_zed_orb_slam3)/launch/lidar_sensor.launch">
+    <arg name="sensor_hostname" value="$(arg lidar_hostname)" doc="hostname or IP in dotted decimal form of the sensor"/>
+  </include> -->
+
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" /> -->
+
+
+  <node name="$(arg node_name)" pkg="zed_wrapper" type="zed_wrapper_node" output="screen" required="true">
+    <rosparam file="$(find kobuki_zed_orb_slam3)/configuration_files/common.yaml" command="load" />
+    <rosparam file="$(find zed_wrapper)/params/$(arg camera_model).yaml" command="load" />
+    <param name="general/camera_name"               value="zed" />
+    <param name="general/base_frame"                value="plate_top_link" />
+    <param name="svo_file"                          value="$(arg svo_file)" />
+    <param name="stream"                            value="$(arg stream)" />
+    <param name="general/zed_id"                    value="$(arg camera_id)" />
+    <param name="general/gpu_id"                    value="$(arg gpu_id)" />
+    <param name="pos_tracking/pos_tracking_enabled" value="false"/>
+    <param name="pos_tracking/publish_tf" value="false"/>
+    <param name="pos_tracking/publish_map_tf" value="false"/>
+    
+  </node>
+
+</launch>
+
+

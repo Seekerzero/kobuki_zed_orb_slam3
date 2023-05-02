@@ -34,10 +34,10 @@
 <launch>
   <arg name="base"       value="kobuki"/>  <!-- create, rhoomba -->
   <arg name="stacks"     value="hexagons"/>  <!-- circles, hexagons -->
-  <arg name="camera"  value="zed"/>  <!-- zed -->
+  <arg name="camera"  value="t265"/>  <!-- zed, d435i, t265 -->
 
   
-  <include file="$(find kobuki_zed_orb_slam3)/launch/robot.launch.xml">
+  <include file="$(find kobuki_zed_orb_slam3)/launch/robot_$(arg camera).launch.xml">
     <arg name="base" value="$(arg base)" />
     <arg name="stacks" value="$(arg stacks)" />
     <arg name="camera" value="$(arg camera)" />
