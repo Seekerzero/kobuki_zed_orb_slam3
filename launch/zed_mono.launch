@@ -2,31 +2,28 @@
     <param name="use_sim_time" value="true" />
 
     <!-- Main node -->
-    <node name="orb_slam3" pkg="orb_slam3_ros" type="ros_stereo" output="screen">
+    <node name="orb_slam3" pkg="orb_slam3_ros" type="ros_mono" output="screen">
         <!-- change the topics according to the dataset -->
-        <remap from="/camera/left/image_raw"    to="/zed_node/left/image_rect_gray"/>
-        <remap from="/camera/right/image_raw"   to="/zed_node/right/image_rect_gray"/>
-
+        <remap from="/camera/image_raw" to="/zed_node/left/image_rect_gray"/>
 
         <!-- Parameters for original ORB-SLAM3 -->
         <param name="voc_file"      type="string" value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
-        <param name="settings_file" type="string" value="$(find kobuki_zed_orb_slam3)/configuration_files/ZED_stereo.yaml"/>
+        <param name="settings_file" type="string" value="$(find kobuki_zed_orb_slam3)/configuration_files/ZED_mono.yaml"/>
 
         <!-- Parameters for ROS -->
         <param name="world_frame_id"    type="string"   value="world" />
-        <param name="cam_frame_id"      type="string"   value="zed_camera_center" />
+        <param name="cam_frame_id"      type="string"   value="zed_base_link" />
         <param name="enable_pangolin"   type="bool"     value="true" />
     </node>
     
-
     <!-- Visualization -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find orb_slam3_ros)/config/orb_slam3_no_imu.rviz" output="screen" />
     
     <!-- Trajectory path -->
     <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_orb_slam3" output="screen" ns="orb_slam3_ros" >
-        <param name="/target_frame_name"        value="world" />
-        <param name="/source_frame_name"        value="odom" />
-        <param name="/trajectory_update_rate"   value="20.0" />
-        <param name="/trajectory_publish_rate"  value="20.0" />
+        <param name="/target_frame_name" value="/world" />
+        <param name="/source_frame_name" value="/camera" />
+        <param name="/trajectory_update_rate" value="20.0" />
+        <param name="/trajectory_publish_rate" value="20.0" />
     </node>
 </launch>

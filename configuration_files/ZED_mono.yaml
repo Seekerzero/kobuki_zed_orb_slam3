@@ -1,13 +1,25 @@
 %YAML:1.0
 
 #--------------------------------------------------------------------------------------------
+# System config
+#--------------------------------------------------------------------------------------------
+
+# When the variables are commented, the system doesn't load a previous session or not store the current one
+
+# If the LoadFile doesn't exist, the system give a message and create a new Atlas from scratch
+#System.LoadAtlasFromFile: "Session_MH01_MH02_MH03_Mono"
+
+# The store file is created from the current session, if a file with the same name exists it is deleted
+#System.SaveAtlasToFile: "Session_MH01_MH02_MH03_Mono"
+
+#--------------------------------------------------------------------------------------------
 # Camera Parameters. Adjust them!
 #--------------------------------------------------------------------------------------------
 File.version: "1.0"
 
-Camera.type: "KannalaBrandt8"
+Camera.type: "PinHole"
 
-# Left Camera calibration and distortion parameters (OpenCV)
+# Camera calibration and distortion parameters (OpenCV) 
 Camera1.fx: 343.918
 Camera1.fy: 343.918
 Camera1.cx: 341.904
@@ -16,65 +28,27 @@ Camera1.cy: 193.009
 # Kannala-Brandt distortion parameters
 Camera1.k1: -0.17198448226768628
 Camera1.k2: 0.027512043987881554
-Camera1.k3: -0.00018046841415451727
-Camera1.k4: 0.0
 Camera1.p1: 6.769158089706363e-05
 Camera1.p2: -0.00042011228669051664
 
-# Right Camera calibration and distortion parameters (OpenCV)
-Camera2.fx: 350.402
-Camera2.fy: 350.402
-Camera2.cx: 347.067
-Camera2.cy: 189.301
-
-# Kannala-Brandt distortion parameters
-Camera2.k1: -0.17802008254863852
-Camera2.k2: 0.031840023785783086
-Camera2.k3: -0.0016885154409013207
-Camera2.k4: 0.0
-Camera2.p1: 0.0001429243059192911
-Camera2.p2: 3.308083039521189e-05
-    
-# Transformation matrix from right camera to left camera
-Stereo.T_c1_c2: !!opencv-matrix
-  rows: 4
-  cols: 4
-  dt: f
-  # data: [ 9.99999341e-01, -1.12939300e-03, -2.06080910e-04, 0.120041,
-  #           1.12839796e-03, 9.99988005e-01, -4.76625875e-03, 0,
-  #           2.11461417e-04, 4.76602307e-03, 9.99988620e-01, 0,
-  #           0.0,0.0,0.0,1.0]
-  data: [ 1, 0, 0, 0.120041,
-          0, 1, 0, 0,
-          0, 0, 1, 0,
-          0.0,0.0,0.0,1.0]
-
-# Lapping area between images (We must calculate)
-Camera1.overlappingBegin: 0
-Camera1.overlappingEnd: 672
-
-Camera2.overlappingBegin: 0
-Camera2.overlappingEnd: 672
-
-# Camera resolution
 Camera.width: 672
 Camera.height: 376
 
+# Camera.newWidth: 600
+# Camera.newHeight: 376
+
 # Camera frames per second 
-Camera.fps: 30
+Camera.fps: 20
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
-
-# Close/Far threshold. Baseline times.
-Stereo.ThDepth: 3.85
 
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
 #--------------------------------------------------------------------------------------------
 
 # ORB Extractor: Number of features per image
-ORBextractor.nFeatures: 1200 # Tested with 1250
+ORBextractor.nFeatures: 2400
 
 # ORB Extractor: Scale factor between levels in the scale pyramid 	
 ORBextractor.scaleFactor: 1.2
@@ -82,16 +56,18 @@ ORBextractor.scaleFactor: 1.2
 # ORB Extractor: Number of levels in the scale pyramid	
 ORBextractor.nLevels: 8
 
+# Stereo.ThDepth: 3.85
+
 # ORB Extractor: Fast threshold
 # Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
 # Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
 # You can lower these values if your images have low contrast			
-ORBextractor.iniThFAST: 15
+ORBextractor.iniThFAST: 20
 ORBextractor.minThFAST: 7
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters
-#--------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 Viewer.KeyFrameSize: 0.05
 Viewer.KeyFrameLineWidth: 1.0
 Viewer.GraphLineWidth: 0.9
@@ -102,3 +78,4 @@ Viewer.ViewpointX: 0.0
 Viewer.ViewpointY: -0.7
 Viewer.ViewpointZ: -3.5
 Viewer.ViewpointF: 500.0
+

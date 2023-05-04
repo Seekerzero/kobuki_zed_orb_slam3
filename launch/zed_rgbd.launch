@@ -1,11 +1,11 @@
 <launch>
-    <param name="use_sim_time" value="false" />
+    <param name="use_sim_time" value="true" />
 
     <!-- Main node -->
     <node name="orb_slam3" pkg="orb_slam3_ros" type="ros_rgbd" output="screen">
         <!-- change the topics according to the dataset -->
-        <remap from="/camera/rgb/image_raw"    to="/zed/zed_node/rgb/image_rect_color"/>
-        <remap from="/camera/depth_registered/image_raw"    to="/zed/zed_node/depth/depth_registered"/>
+        <remap from="/camera/rgb/image_raw"    to="/zed_node/rgb/image_rect_color"/>
+        <remap from="/camera/depth_registered/image_raw"    to="/zed_node/depth/depth_registered"/>
 
         <!-- Parameters for original ORB-SLAM3 -->
         <param name="voc_file"      type="string" value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
@@ -13,7 +13,7 @@
 
         <!-- Parameters for ROS -->
         <param name="world_frame_id"    type="string"   value="map" />
-        <param name="cam_frame_id"      type="string"   value="odom" />
+        <param name="cam_frame_id"      type="string"   value="zed_base_link" />
         <param name="enable_pangolin"   type="bool"     value="true" />
     </node>
     
