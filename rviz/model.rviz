@@ -30,7 +30,11 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
+<<<<<<< HEAD
     SyncSource: ""
+=======
+    SyncSource: Image
+>>>>>>> fd5bdc91b8fad1692610a531cec1737644283b32
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
