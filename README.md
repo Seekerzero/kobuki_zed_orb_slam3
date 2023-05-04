@@ -157,7 +157,7 @@ $ roslaunch kobuki_zed_orb_slam3 view_model.launch
 On a new ssh terminal, rosbag the topics:
 
 ```bash
-$ rosbag record /zed_node/left_raw/image_raw_color /zed_node/right_raw/image_raw_color /tf /tf_static /mobile_base/sensors/imu_data_raw /mobile_base/sensors/imu_data /joint_states /zed_node/depth/camera_info /zed_node/left_raw/camera_info /zed_node/right_raw/camera_info /zed_node/parameter_descriptions /zed_node/left/image_rect_gray /zed/zed_node/right/image_rect_gray /zed/zed_node/rgb/image_rect_color /zed/zed_node/depth/depth_registered
+$ rosbag record /zed_node/left_raw/image_raw_color /zed_node/right_raw/image_raw_color /tf /tf_static /mobile_base/sensors/imu_data_raw /mobile_base/sensors/imu_data /joint_states /zed_node/depth/camera_info /zed_node/left_raw/camera_info /zed_node/right_raw/camera_info /zed_node/parameter_descriptions /zed_node/left/image_rect_gray /zed_node/right/image_rect_gray /zed_node/rgb/image_rect_color /zed_node/depth/depth_registered
 ```
 
 
