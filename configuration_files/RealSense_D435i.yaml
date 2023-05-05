@@ -28,7 +28,7 @@ Camera.fps: 30
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
 
-Stereo.ThDepth: 10.0
+Stereo.ThDepth: 5.0
 Stereo.b: 0.0745
 
 # Depth map values factor
