@@ -22,7 +22,7 @@ $ cd src
 [Turtlebot2 on noetic](https://github.com/hanruihua/Turtlebot2_on_Noetic)
 
 ```bash
-$ sudo apt-get install ros-noetic-sophus ros-noetic-joy libusb-dev libftdi-dev ros-noetic-base-local-planner ros-noetic-move-base-msgs pyqt5-dev-tools
+$ sudo apt-get install ros-noetic-sophus ros-noetic-joy libusb-dev libftdi-dev ros-noetic-base-local-planner ros-noetic-move-base-msgs pyqt5-dev-tools net-tools
 $ git clone https://github.com/hanruihua/Turtlebot2_on_Noetic.git
 $ cd ~/catkin_ws
 $ rosdep install --from-paths src --ignore-src -r -y
@@ -75,7 +75,7 @@ Setup [Ouster ROS Wrapper](https://github.com/ouster-lidar/ouster-ros):
 
 ```bash
 $ sudo apt install -y ros-noetic-pcl-ros ros-noetic-rviz
-$ sudo apt install -y build-essential libeigen3-dev libjsoncpp-dev libspdlog-dev libcurl4-openssl-dev cmake
+$ sudo apt install -y build-essential libeigen3-dev libjsoncpp-dev libspdlog-dev libcurl4-openssl-dev cmake net-tools
 $ cd ~/catkin_ws/src
 $ git clone --recurse-submodules https://github.com/ouster-lidar/ouster-ros.git
 $ cd ~/catkin_ws

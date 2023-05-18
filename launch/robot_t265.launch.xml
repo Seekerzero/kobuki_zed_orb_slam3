@@ -40,7 +40,7 @@
   <include file="$(find kobuki_zed_orb_slam3)/launch/realsense_t265.launch">
   </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" /> -->
 
 </launch>
 
