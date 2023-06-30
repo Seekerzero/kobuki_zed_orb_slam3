@@ -1,5 +1,5 @@
 <launch>
-    <param name="use_sim_time" value="false" />
+    <param name="use_sim_time" value="true" />
 
     <!-- Main node -->
     <node name="orb_slam3" pkg="orb_slam3_ros" type="ros_stereo_inertial" output="screen">

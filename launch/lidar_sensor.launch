@@ -11,7 +11,7 @@
     RNG19_RFL8_SIG16_NIR16,
     RNG15_RFL8_NIR8
     }"/>
-  <arg name="lidar_mode" default="1024x20" doc="resolution and rate; possible values: {
+  <arg name="lidar_mode" default="1024x10" doc="resolution and rate; possible values: {
     512x10,
     512x20,
     1024x10,
@@ -30,7 +30,7 @@
   <arg name="rviz_config" default="$(find ouster_ros)/config/viz.rviz" doc="optional rviz config file"/>
   <arg name="tf_prefix" default=" " doc="namespace for tf transforms"/>
 
-  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" /> -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_zed_orb_slam3)/rviz/model.rviz" />
 
   <group ns="$(arg ouster_ns)">
     <node pkg="nodelet" type="nodelet" name="os_nodelet_mgr"
