@@ -22,7 +22,7 @@ $ cd src
 [Turtlebot2 on noetic](https://github.com/hanruihua/Turtlebot2_on_Noetic)
 
 ```bash
-$ sudo apt-get install ros-noetic-sophus ros-noetic-joy libusb-dev libftdi-dev ros-noetic-base-local-planner ros-noetic-move-base-msgs pyqt5-dev-tools
+$ sudo apt-get install ros-noetic-sophus ros-noetic-joy libusb-dev libftdi-dev ros-noetic-base-local-planner ros-noetic-move-base-msgs pyqt5-dev-tools net-tools
 $ git clone https://github.com/hanruihua/Turtlebot2_on_Noetic.git
 $ cd ~/catkin_ws
 $ rosdep install --from-paths src --ignore-src -r -y
@@ -75,7 +75,7 @@ Setup [Ouster ROS Wrapper](https://github.com/ouster-lidar/ouster-ros):
 
 ```bash
 $ sudo apt install -y ros-noetic-pcl-ros ros-noetic-rviz
-$ sudo apt install -y build-essential libeigen3-dev libjsoncpp-dev libspdlog-dev libcurl4-openssl-dev cmake
+$ sudo apt install -y build-essential libeigen3-dev libjsoncpp-dev libspdlog-dev libcurl4-openssl-dev cmake net-tools
 $ cd ~/catkin_ws/src
 $ git clone --recurse-submodules https://github.com/ouster-lidar/ouster-ros.git
 $ cd ~/catkin_ws
@@ -157,7 +157,8 @@ $ roslaunch kobuki_zed_orb_slam3 view_model.launch
 On a new ssh terminal, rosbag the topics:
 
 ```bash
-$ rosbag record /zed_node/left_raw/image_raw_color /zed_node/right_raw/image_raw_color /tf /tf_static /mobile_base/sensors/imu_data_raw /mobile_base/sensors/imu_data /joint_states /zed_node/depth/camera_info /zed_node/left_raw/camera_info /zed_node/right_raw/camera_info /zed_node/parameter_descriptions /zed_node/left/image_rect_gray /zed_node/right/image_rect_gray /zed_node/rgb/image_rect_color /zed_node/depth/depth_registered
+$ rosbag record -b 0 --split --duration=10m /camera/fisheye1/camera_info /camera/fisheye1/image_raw /camera/fisheye1/metadata /camera/fisheye2/camera_info /camera/fisheye2/image_raw /camera/fisheye2/camera/fisheye2/metadata /camera/imu /initialpose /joint_states /mobile_base/sensors/imu_data /odom /ouster/imu /ouster/metadata /ouster/points /ouster/range_image /tf /tf_static
+
 ```
 
 
