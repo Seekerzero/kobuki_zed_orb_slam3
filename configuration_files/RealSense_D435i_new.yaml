@@ -28,38 +28,47 @@ Camera.fps: 30
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
 
-Stereo.ThDepth: 5.0
+Stereo.ThDepth: 15.0
 Stereo.b: 0.0745
 
 # Depth map values factor
 RGBD.DepthMapFactor: 1000.0
 
 # Transformation from body-frame (imu) to left camera
+# IMU.T_b_c1: !!opencv-matrix
+#    rows: 4
+#    cols: 4
+#    dt: f
+#    data: [ 0.999858, 0.0166211,  -0.00275612, 0.0203072354197502,
+#           -0.0166113 , 0.999856,  0.00355138 , -0.00537436921149492,
+#             0.00281475, -0.00350509, 0.99999, -0.0113064320757985 ,
+#            0.0, 0.0, 0.0, 1.0]
 IMU.T_b_c1: !!opencv-matrix
    rows: 4
    cols: 4
    dt: f
-   data: [ 1.0, 0.0,  0.0, 0.0,
-          0.0 , 1.0,  0.0 , 0.0,
-            0.0, 0.0, 1.0, 0.0 ,
+   data: [ 0.999858, -0.0166113,  0.00281475, -0.0203618034720421,
+          0.0166211 , 0.999856,  -0.00350509 , 0.00499643431976438,
+            -0.00275612, 0.00355138, 0.99999, 0.0113813737407327 ,
            0.0, 0.0, 0.0, 1.0]
+
 
 
 # Do not insert KFs when recently lost
 IMU.InsertKFsWhenLost: 0
 
 # IMU noise (Use those from VINS-mono)
-IMU.NoiseGyro: 0.00013413946425449452  # 3 # 2.44e-4 #1e-3 # rad/s^0.5
-IMU.NoiseAcc: 0.0015610801065328163 #2 # 1.47e-3 #1e-2 # m/s^1.5
-IMU.GyroWalk: 2.086532690583898e-06  # rad/s^1.5
-IMU.AccWalk: 7.043880586959862e-05   # m/s^2.5
+IMU.NoiseGyro: 0.00015229685527655943 # 3 # 2.44e-4 #1e-3 # rad/s^0.5
+IMU.NoiseAcc: 0.001286878811516856  #2 # 1.47e-3 #1e-2 # m/s^1.5
+IMU.GyroWalk: 6.1849348816963675e-06 # rad/s^1.5
+IMU.AccWalk: 8.841827741845363e-05 # m/s^2.5
 IMU.Frequency: 200.0
 
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
 #--------------------------------------------------------------------------------------------
 # ORB Extractor: Number of features per image
-ORBextractor.nFeatures: 1250
+ORBextractor.nFeatures: 1600
 
 # ORB Extractor: Scale factor between levels in the scale pyramid 	
 ORBextractor.scaleFactor: 1.2
@@ -71,7 +80,7 @@ ORBextractor.nLevels: 8
 # Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
 # Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
 # You can lower these values if your images have low contrast			
-ORBextractor.iniThFAST: 20
+ORBextractor.iniThFAST: 12
 ORBextractor.minThFAST: 7
 
 #--------------------------------------------------------------------------------------------
