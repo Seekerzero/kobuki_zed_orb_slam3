@@ -1,0 +1,73 @@
+bag_path=$(realpath /home/zwhy/slam_project/robosense_m2/input_bags)
+preprocessed_path=$(realpath /home/zwhy/slam_project/robosense_m2/preprocessed)
+
+sudo docker run \
+  -it \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $bag_path:/tmp/input_bags \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration preprocess -a -d -v \
+  --camera_model plumb_bob \
+  --camera_intrinsic 920.812927246094,919.311157226562,644.111328125,365.196655273438 \
+  --camera_distortion_coeffs 0.0,0.0,0.0,0.0,0.0 \
+  /tmp/input_bags /tmp/preprocessed
+
+# Initial guess
+sudo docker run \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration initial_guess_manual /tmp/preprocessed
+
+
+sudo docker run \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration initial_guess_auto /tmp/preprocessed
+
+
+sudo docker run \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration find_matches_superglue.py /tmp/preprocessed
+
+# Fine registration
+docker run \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration calibrate /tmp/preprocessed
+
+# Result inspection
+docker run \
+  --rm \
+  --net host \
+  --gpus all \
+  -e DISPLAY=$DISPLAY \
+  -v $HOME/.Xauthority:/root/.Xauthority \
+  -v $preprocessed_path:/tmp/preprocessed \
+  koide3/direct_visual_lidar_calibration:noetic \
+  rosrun direct_visual_lidar_calibration viewer /tmp/preprocessed

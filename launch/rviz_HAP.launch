@@ -1,0 +1,13 @@
+<launch>
+
+	<node pkg="tf" type="static_transform_publisher" name="lidar_to_map" args="0 0 0 0 0 0 map livox_frame 10" />
+
+	<node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
+			args="-d $(find livox_ros_driver2)/config/display_point_cloud_ROS1.rviz"/>
+
+	<!-- <group if="$(arg rosbag_enable)">
+    	<node pkg="rosbag" type="record" name="record" output="screen"
+          		args="-a"/>
+    </group> -->
+
+</launch>
